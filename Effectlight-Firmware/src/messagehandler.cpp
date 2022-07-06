@@ -1,4 +1,5 @@
 #include <Adafruit_NeoPixel.h>
+#include <WiFiUdp.h>
 
 // External functions
 void run_program(int index);
@@ -11,14 +12,15 @@ enum class MessageHeader : uint8_t
 {
     Clear = 0,
     Show,
-    UpdateLength,
     Set,
     Fill,
-    RunProgram = 100,
+    ListPrograms = 100,
+    ProgramEntry,
+    RunProgram,
     StopProgram
 };
 
-void handle_message(const char* buffer, int length)
+void handle_message(WiFiUDP* pUdp, const char* buffer, int length)
 {
     if (length < 1)
         return;
@@ -32,11 +34,6 @@ void handle_message(const char* buffer, int length)
     else if (header == MessageHeader::Show)
     {
         g_Pixels.show();
-    }
-    else if (header == MessageHeader::UpdateLength and length == 3)
-    {
-        uint16_t stripLength = ((uint16_t)buffer[1] << 8) | ((uint16_t)buffer[2]);
-        g_Pixels.updateLength(stripLength);
     }
     else if (header == MessageHeader::Set and length == 6)
     {
@@ -56,6 +53,11 @@ void handle_message(const char* buffer, int length)
         auto color = g_Pixels.Color(r, g, b);
 
         g_Pixels.fill(color, start, count);
+    }
+    else if (header == MessageHeader::ListPrograms)
+    {
+        //char replyBuffer[18];
+        //pUdp->write(replyBuffer, (size_t)sizeof(replyBuffer));
     }
     else if (header == MessageHeader::RunProgram and length == 2)
     {

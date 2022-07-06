@@ -5,15 +5,17 @@
 #include "secret.h"
 
 // External functions
-void handle_message(const char* buffer, int length);
+void handle_message(WiFiUDP* pUdp, const char* buffer, int length);
 void program_tick(unsigned long delta);
 
 #if defined ESP12E
+#define PIN_NEOPIXEL_PLATFORM D8
 #elif defined ESP01
+#define PIN_NEOPIXEL_PLATFORM 3
 #endif
 
 // Pins
-const int PIN_NEOPIXEL = 2;
+const int PIN_NEOPIXEL = PIN_NEOPIXEL_PLATFORM;
 
 // Loop
 const unsigned long LOOP_INTERVAL = 20;
@@ -39,25 +41,45 @@ char g_UdpReceived[256];
 
 void setup()
 {
+    delay(1000);
+
     // Serial monitor
     //Serial.begin(115200);
 
+    const uint32_t green = g_Pixels.Color(0, 100, 0);
+    const uint32_t yellow = g_Pixels.Color(80, 80, 0);
+
     // Initialize pixels
     g_Pixels.begin();
+    g_Pixels.clear();
+    g_Pixels.show();
 
     // Initialize WiFi
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD, 0, WIFI_BSSID);
+    g_Pixels.setPixelColor(0, yellow);
+    g_Pixels.show();
 
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
     }
 
+    g_Pixels.setPixelColor(0, green);
+    g_Pixels.show();
+
     // Initialize mDNS
     MDNS.begin(HOST_NAME);
+    g_Pixels.setPixelColor(1, green);
+    g_Pixels.show();
 
     // Initialize UDP socket
     g_Udp.begin(UDP_PORT);
+    g_Pixels.setPixelColor(2, green);
+    g_Pixels.show();
+
+    delay(1000);
+    g_Pixels.clear();
+    g_Pixels.show();
 }
 
 void loop()
@@ -84,7 +106,7 @@ void loop()
 
             if (length > 0)
             {
-                handle_message(g_UdpReceived, length);
+                handle_message(&g_Udp, g_UdpReceived, length);
             }
         }
     }

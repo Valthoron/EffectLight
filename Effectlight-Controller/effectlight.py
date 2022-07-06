@@ -5,7 +5,7 @@ from enum import IntEnum, auto
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QColor
-from PyQt5.QtWidgets import QApplication, QColorDialog, QFrame, QMainWindow
+from PyQt5.QtWidgets import QApplication, QColorDialog, QFrame, QMainWindow, QListWidget
 from PyQt5.uic import loadUi
 
 
@@ -14,17 +14,15 @@ PORT = 8888
 
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
-#UDPServerSocket.sendto(bytearray([3, 0, 0, 0, 9, 0]), (HOST, PORT))
-#UDPServerSocket.sendto(bytearray([1]), (HOST, PORT))
-
 
 class MessageHeader(IntEnum):
     Clear = 0
     Show = auto()
-    UpdateLength = auto()
     Set = auto()
     Fill = auto()
-    RunProgram = 100
+    ListPrograms = 100
+    ProgramEntry = auto()
+    RunProgram = auto()
     StopProgram = auto()
 
 
@@ -47,7 +45,13 @@ class MainWindow(QMainWindow):
         self.color_indicator: QFrame
         self.color_indicator = self.findChild(QFrame, "colorIndicator")
 
-        #UDPServerSocket.sendto(bytearray([MessageHeader.StopProgram]), (HOST, PORT))
+        self.program_list: QListWidget
+        self.program_list = self.findChild(QListWidget, "programList")
+        self.program_list.addItem("blink test")
+        self.program_list.addItem("fade test")
+        self.program_list.addItem("police")
+
+        # UDPServerSocket.sendto(bytearray([MessageHeader.StopProgram]), (HOST, PORT))
 
     def closeEvent(self, event: QCloseEvent) -> None:
         self.color_dialog.close()
@@ -56,23 +60,35 @@ class MainWindow(QMainWindow):
     def showColorPicker(self):
         self.color_dialog.show()
 
-    def setPanel1(self):
+    def setPanel(self):
         start = [0, 0]
-        count = [0, 48]
+        count = [0, 0]
         rgb = split_qcolor(self.color_dialog.currentColor())
         message = [MessageHeader.Fill] + start + count + rgb
         UDPServerSocket.sendto(bytearray(message), (HOST, PORT))
         UDPServerSocket.sendto(bytearray([MessageHeader.Show]), (HOST, PORT))
 
-    def setPanel2(self):
-        start = [0, 48]
-        count = [0, 48]
-        rgb = split_qcolor(self.color_dialog.currentColor())
+    def clearPanel(self):
+        start = [0, 0]
+        count = [0, 0]
+        rgb = [0, 0, 0]
         message = [MessageHeader.Fill] + start + count + rgb
         UDPServerSocket.sendto(bytearray(message), (HOST, PORT))
         UDPServerSocket.sendto(bytearray([MessageHeader.Show]), (HOST, PORT))
 
-    @pyqtSlot()
+    def stopListPrograms(self):
+        UDPServerSocket.sendto(bytearray([MessageHeader.StopProgram]), (HOST, PORT))
+
+    def runProgram(self):
+        indexes = self.program_list.selectedIndexes()
+
+        if len(indexes) == 0:
+            return
+
+        index = indexes[0].row()
+        UDPServerSocket.sendto(bytearray([MessageHeader.RunProgram, index]), (HOST, PORT))
+
+    @ pyqtSlot()
     def colorSelected(self):
         color = self.color_dialog.currentColor()
         self.color_indicator.setStyleSheet(f"background-color: rgb({color.red()},{color.green()},{color.blue()}); border: 1px solid black;")

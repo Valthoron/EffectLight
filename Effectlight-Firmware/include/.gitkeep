@@ -1,0 +1,7 @@
+Create a "secret.h" file in this directory, and #define the following:
+
+#define SECRET_WIFI_SSID ""
+#define SECRET_WIFI_PASSWORD ""
+#define SECRET_WIFI_BSSID { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+
+Fill in the SSID and PASSWORD strings, write the MAC address of the desired access point as bytes in BSSID.

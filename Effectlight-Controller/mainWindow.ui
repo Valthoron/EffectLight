@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>80</y>
       <width>81</width>
       <height>21</height>
      </rect>
@@ -33,7 +33,7 @@
       <x>10</x>
       <y>10</y>
       <width>81</width>
-      <height>61</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -46,30 +46,66 @@
      <enum>QFrame::Raised</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="sendLeftPanelButton">
+   <widget class="QPushButton" name="setPanelButton">
     <property name="geometry">
      <rect>
       <x>100</x>
       <y>10</y>
       <width>81</width>
-      <height>81</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Panel 1</string>
+     <string>Set</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="sendRightPanelButton">
+   <widget class="QPushButton" name="runButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>160</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearPanelButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>60</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopListButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>110</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop / List</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="programList">
     <property name="geometry">
      <rect>
       <x>190</x>
       <y>10</y>
-      <width>81</width>
-      <height>81</height>
+      <width>201</width>
+      <height>192</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Panel 2</string>
     </property>
    </widget>
   </widget>
@@ -87,47 +123,81 @@
      <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>84</x>
-     <y>136</y>
+     <x>57</x>
+     <y>121</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>sendLeftPanelButton</sender>
+   <sender>setPanelButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>setPanel1()</slot>
+   <slot>setPanel()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>153</x>
-     <y>80</y>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>176</x>
-     <y>117</y>
+     <x>184</x>
+     <y>37</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>sendRightPanelButton</sender>
+   <sender>clearPanelButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>setPanel2()</slot>
+   <slot>clearPanel()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
+     <x>148</x>
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>256</x>
-     <y>101</y>
+     <x>187</x>
+     <y>83</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stopListButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stopListPrograms()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>runProgram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>187</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>showColorPicker()</slot>
-  <slot>setPanel1()</slot>
-  <slot>setPanel2()</slot>
+  <slot>setPanel()</slot>
+  <slot>stopListPrograms()</slot>
+  <slot>runProgram()</slot>
+  <slot>clearPanel()</slot>
  </slots>
 </ui>
