@@ -72,11 +72,7 @@ class MainWindow(QMainWindow):
         self.socket.sendto(bytearray([MessageHeader.Show]), (HOST, PORT))
 
     def clearPanel(self):
-        start = [0, 0]
-        count = [0, 0]
-        rgb = [0, 0, 0]
-        message = [MessageHeader.Fill] + start + count + rgb
-        self.socket.sendto(bytearray(message), (HOST, PORT))
+        self.socket.sendto(bytearray([MessageHeader.Clear]), (HOST, PORT))
         self.socket.sendto(bytearray([MessageHeader.Show]), (HOST, PORT))
 
     def stopProgram(self):
