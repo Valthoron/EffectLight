@@ -1,5 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 #include <WiFiUdp.h>
+#include "program.h"
 
 // External functions
 void run_program(int index);
@@ -7,6 +8,10 @@ void stop_program();
 
 // External variables
 extern Adafruit_NeoPixel g_Pixels;
+extern Program* g_Programs[];
+extern int g_ProgramCount;
+
+const size_t MAX_NAME_LENGTH = 16;
 
 enum class MessageHeader : uint8_t
 {
@@ -56,8 +61,20 @@ void handle_message(WiFiUDP* pUdp, const char* buffer, int length)
     }
     else if (header == MessageHeader::ListPrograms)
     {
-        //char replyBuffer[18];
-        //pUdp->write(replyBuffer, (size_t)sizeof(replyBuffer));
+        char replyBuffer[1 + MAX_NAME_LENGTH];
+        replyBuffer[0] = (char)MessageHeader::ProgramEntry;
+
+        for (int i = 0; i < g_ProgramCount; i++)
+        {
+            const char* name = g_Programs[i]->get_name();
+
+            memset(&replyBuffer[1], 0, MAX_NAME_LENGTH);
+            strncpy(&replyBuffer[1], name, min(MAX_NAME_LENGTH, strlen(name)));
+
+            pUdp->beginPacket(pUdp->remoteIP(), pUdp->remotePort());
+            pUdp->write(replyBuffer, sizeof(replyBuffer));
+            pUdp->endPacket();
+        }
     }
     else if (header == MessageHeader::RunProgram and length == 2)
     {

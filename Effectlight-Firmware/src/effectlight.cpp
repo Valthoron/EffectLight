@@ -29,7 +29,9 @@ Adafruit_NeoPixel g_Pixels = Adafruit_NeoPixel(48, PIN_NEOPIXEL);
 // WiFi
 const char* WIFI_SSID = SECRET_WIFI_SSID;
 const char* WIFI_PASSWORD = SECRET_WIFI_PASSWORD;
+#ifdef SECRET_WIFI_BSSID
 const byte WIFI_BSSID[6] = SECRET_WIFI_BSSID;
+#endif
 
 // mDNS
 const char* HOST_NAME = "effectlight";
@@ -55,7 +57,11 @@ void setup()
     g_Pixels.show();
 
     // Initialize WiFi
+#ifdef SECRET_WIFI_BSSID
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD, 0, WIFI_BSSID);
+#else
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+#endif
     g_Pixels.setPixelColor(0, yellow);
     g_Pixels.show();
 
@@ -116,5 +122,6 @@ void loop()
 
     // Sleep until next loop
     unsigned long toc = micros();
-    delayMicroseconds(LOOP_INTERVAL_US - (toc - tic));
+    unsigned long delay = max(LOOP_INTERVAL_US - (toc - tic), 1UL);
+    delayMicroseconds(delay);
 }

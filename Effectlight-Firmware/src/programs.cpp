@@ -1,32 +1,36 @@
 #include <Adafruit_NeoPixel.h>
+#include "program.h"
+#include "programs/blinktest.hpp"
+#include "programs/breathetest.hpp"
+#include "programs/police.hpp"
+#include "programs/road.hpp"
 
 // List of programs
-void program_blinktest(unsigned long step, unsigned long time, unsigned long delta);
-void program_breathetest(unsigned long step, unsigned long time, unsigned long delta);
-void program_police(unsigned long step, unsigned long time, unsigned long delta);
+Program* g_Programs[] = {
+    new Program_BlinkTest(),
+    new Program_BreatheTest(),
+    new Program_Police(),
+    new Program_Road()
+};
+
+int g_ProgramCount = sizeof(g_Programs) / sizeof(Program);
 
 // External variables
 extern Adafruit_NeoPixel g_Pixels;
 
 bool g_bProgramRunning;
-void (*active_program)(unsigned long, unsigned long, unsigned long) = nullptr;
+Program* g_pActiveProgram = nullptr;
 
 unsigned long g_iStep = 0;
 unsigned long g_iTime = 0;
 
 void run_program(int index)
 {
-    switch (index)
-    {
-    case 0: active_program = program_blinktest; break;
-    case 1: active_program = program_breathetest; break;
-    case 2: active_program = program_police; break;
-    default: active_program = nullptr; break;
-    }
-
-    if (active_program == nullptr)
+    if ((index < 0) or (index >= g_ProgramCount))
         return;
 
+    g_pActiveProgram = g_Programs[index];
+    g_pActiveProgram->init();
     g_iTime = 0;
     g_bProgramRunning = true;
 }
@@ -38,7 +42,7 @@ void stop_program()
 
 void program_tick(unsigned long delta)
 {
-    if (active_program == nullptr)
+    if (g_pActiveProgram == nullptr)
         return;
 
     if (not g_bProgramRunning)
@@ -47,5 +51,5 @@ void program_tick(unsigned long delta)
     g_iStep++;
     g_iTime += delta;
 
-    active_program(g_iStep, g_iTime, delta);
+    g_pActiveProgram->tick(g_iStep, g_iTime, delta);
 }

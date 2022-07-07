@@ -85,7 +85,7 @@
      <string>Clear</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="stopListButton">
+   <widget class="QPushButton" name="stopButton">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -95,7 +95,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Stop / List</string>
+     <string>Stop</string>
     </property>
    </widget>
    <widget class="QListWidget" name="programList">
@@ -104,8 +104,21 @@
       <x>190</x>
       <y>10</y>
       <width>201</width>
-      <height>192</height>
+      <height>171</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="getListButton">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>179</y>
+      <width>201</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Get list</string>
     </property>
    </widget>
   </widget>
@@ -161,10 +174,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>stopListButton</sender>
+   <sender>stopButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>stopListPrograms()</slot>
+   <slot>stopProgram()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>145</x>
@@ -192,12 +205,29 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>getListButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>listPrograms()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>238</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showColorPicker()</slot>
   <slot>setPanel()</slot>
-  <slot>stopListPrograms()</slot>
+  <slot>stopProgram()</slot>
   <slot>runProgram()</slot>
   <slot>clearPanel()</slot>
+  <slot>listPrograms()</slot>
  </slots>
 </ui>
