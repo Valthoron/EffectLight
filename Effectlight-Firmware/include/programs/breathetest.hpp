@@ -14,8 +14,8 @@ class Program_BreatheTest : public Program
 
     void tick(unsigned long step, unsigned long time, unsigned long delta)
     {
-        unsigned long progress = time % 1000;
-        uint32_t brightness;
+        int progress = time % 1000;
+        uint8_t brightness;
 
         if (progress < 500)
         {

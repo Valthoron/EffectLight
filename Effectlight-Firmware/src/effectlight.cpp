@@ -43,7 +43,7 @@ char g_UdpReceived[256];
 
 void setup()
 {
-    delay(1000);
+    delay(500);
 
     // Serial monitor
     //Serial.begin(115200);
@@ -55,6 +55,8 @@ void setup()
     g_Pixels.begin();
     g_Pixels.clear();
     g_Pixels.show();
+
+    delay(500);
 
     // Initialize WiFi
 #ifdef SECRET_WIFI_BSSID

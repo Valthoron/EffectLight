@@ -4,13 +4,17 @@
 #include "programs/breathetest.hpp"
 #include "programs/police.hpp"
 #include "programs/road.hpp"
+#include "programs/alert.hpp"
+#include "programs/television.hpp"
 
 // List of programs
 Program* g_Programs[] = {
     new Program_BlinkTest(),
     new Program_BreatheTest(),
     new Program_Police(),
-    new Program_Road()
+    new Program_Road(),
+    new Program_Alert(),
+    new Program_Television()
 };
 
 int g_ProgramCount = sizeof(g_Programs) / sizeof(Program);

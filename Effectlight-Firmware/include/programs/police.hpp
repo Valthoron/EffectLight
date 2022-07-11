@@ -12,24 +12,24 @@ class Program_Police : public Program
 
     void tick(unsigned long step, unsigned long time, unsigned long delta)
     {
-        unsigned long progress = time % 1500;
-        uint8_t blue;
-        uint8_t red;
+        int progress = time % 750;
+        uint8_t blue = 0;
+        uint8_t red = 0;
 
-        if (progress < 500)
+        if (progress < 250)
         {
-            blue = progress / 2;
+            blue = progress;
             red = 0;
         }
-        else if (progress < 1000)
+        else if (progress < 500)
         {
-            blue = (1000 - progress) / 2;
-            red = (progress - 500) / 2;
+            blue = 500 - progress;
+            red = progress - 250;
         }
-        else if (progress < 1500)
+        else if (progress < 750)
         {
             blue = 0;
-            red = (1500 - progress) / 2;
+            red = 750 - progress;
         }
 
         uint32_t leftColor = g_Pixels.Color(0, 0, blue);
